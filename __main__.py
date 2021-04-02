@@ -13,8 +13,8 @@ class Link:
     url: str
     visited: bool
     eggs: list[str]
-    def __init__(self, link: str) -> None:
-        self.url = link
+    def __init__(self, url: str) -> None:
+        self.url = url
         self.visited = False
     def __str__(self) -> str:
         return self.url
@@ -35,7 +35,8 @@ def find_hrefs(soup: bs4.BeautifulSoup):
     for link in soup.find_all('a'):
         attrs: dict = link.attrs
         href: str = attrs['href']
-        if href.startswith('https://www.mintyteeth.com') and 'wp-content' not in href:
+        if href.startswith('https://www.mintyteeth.com') and \
+                not href.startswith('https://www.mintyteeth.com/wp-'):
             yield href
 
 
@@ -71,23 +72,43 @@ def get_cache(url: str):
     return content
 
 
-main_link = Link('https://www.mintyteeth.com')
-links_by_url: dict[str, Link] = { main_link.url: main_link }
+response = requests.get('https://www.mintyteeth.com/sitemap_index.xml', headers=get_headers())
+soup = bs4.BeautifulSoup(response.content, 'lxml')
+sitemap_urls = []
+for sitemap_loc in soup.find_all('loc'):
+    contents = sitemap_loc.contents
+    url = contents[0]
+    sitemap_urls.append(url)
+
+urls = []
+for sitemap_url in sitemap_urls:
+    response = requests.get(sitemap_url, headers=get_headers())
+    soup = bs4.BeautifulSoup(response.content, 'lxml')
+    for loc in soup.find_all('loc'):
+        contents = loc.contents
+        url = contents[0]
+        urls.append(url)
+        
+links_by_url = {
+    url: Link(url)
+    for url
+    in urls
+}
 
 not_visited = [link for link in links_by_url.values() if not link.visited]
 while not_visited:
     for link in not_visited:
         url = link.url
 
-        content = get_cache(url)
-        if content is None:
+        contents = get_cache(url)
+        if contents is None:
             print(f'visiting {url}')
             response = requests.get(link.url, headers=get_headers())
-            content = response.content
-            cache(url, content)
+            contents = response.content
+            cache(url, contents)
         else:
             print(f'used cache for {url}')
-        soup = bs4.BeautifulSoup(content, features="html.parser")
+        soup = bs4.BeautifulSoup(contents, features="html.parser")
         
         eggs_for_link = list(find_eggs(soup))
         link.eggs = eggs_for_link
@@ -105,7 +126,7 @@ while not_visited:
 all_eggs = set()
 for link in links_by_url.values():
     all_eggs.update(link.eggs)
-all_eggs = list(all_eggs)
+all_eggs = sorted(all_eggs)
 
 for egg in all_eggs:
     response = requests.get(egg, headers=get_headers())

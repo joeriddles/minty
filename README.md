@@ -1,6 +1,9 @@
 # minty🍃
 This project was created for fun and profit (just kidding - only fun). The goal of the project is to find all the hidden eggs on https://mintyteeth.com for Easter.
 
+![Egg ad](readme/egg_ad.png?raw=true "Egg ad")
+
+
 ## 🏃‍♂️ To Run
 - `pip install -r requirements.txt`
 - Update `__main__.py.PATH` to your local repo location.

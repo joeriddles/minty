@@ -1,13 +1,13 @@
 # minty🍃
 
-## To Run
+## 🏃‍♂️ To Run
 - `pip install -r requirements.txt`
 - Update `__main__.py.PATH` to your local repo location.
 - Run `python -m minty` from a terminal.
 - Sit back and enjoy.☕
 
-## /cache
+## 📂 /cache
 Cached HTML content responses.
 
-## /eggs
+## 🥚 /eggs
 Container downloaded egg images

@@ -10,4 +10,4 @@
 Cached HTML content responses.
 
 ## 🥚 /eggs
-Container downloaded egg images
+Cached downloaded egg images.

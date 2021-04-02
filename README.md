@@ -1,7 +1,10 @@
 # minty
 
 ## To Run 🏃‍♂️
-Update `__main__.py.PATH` to your repo location and run `python -m minty` from a terminal.
+- `pip install -r requirements.txt`
+- Update `__main__.py.PATH` to your local repo location.
+- Run `python -m minty` from a terminal.
+- Sit back and enjoy.☕
 
 ## /cache
 Cached HTML content responses.

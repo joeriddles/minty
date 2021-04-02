@@ -1,7 +1,7 @@
 # minty🍃
 This project was created for fun and profit (just kidding - only fun). The goal of the project is to find all the hidden eggs on https://mintyteeth.com for Easter.
 
-![Egg ad](readme/egg_ad.png?raw=true "Egg ad")
+![Egg ad](https://github.com/joeriddles/minty/blob/main/readme/egg_ad.png?raw=True)
 
 
 ## 🏃‍♂️ To Run

@@ -1,4 +1,5 @@
 # minty🍃
+This project was created for fun and profit (just kidding - only fun). The goal of the project is to find all the hidden eggs on https://mintyteeth.com for Easter.
 
 ## 🏃‍♂️ To Run
 - `pip install -r requirements.txt`

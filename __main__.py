@@ -51,6 +51,8 @@ def get_cache_url(url: str) -> str:
     url = url.replace('https://', '')
     url = url.replace('.', '_')
     url = url.replace('/', '_')
+    if not url.endswith('.html'):
+        url = url + '.html'
     return url
 
 

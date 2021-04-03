@@ -9,7 +9,6 @@ This project was created for fun and profit (just kidding - only fun). The goal 
   - Windows: `python -m venv ./.venv; ./.venv/Scripts/activate.ps1`
   - Linux: `python -m venv ./.venv && ./.venv/Scripts/activate`
 - `pip install -r requirements.txt`
-- Update `__main__.py.PATH` to your local repo location.
 - Run `python -m minty` from a terminal.
 - Sit back and enjoy.☕
 

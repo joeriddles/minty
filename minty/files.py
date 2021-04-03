@@ -5,7 +5,11 @@ import pathlib
 
 
 PATH = pathlib.Path(__file__).parent.parent.absolute()
-print(f'path: {PATH}')
+print(f'PATH: {PATH}')
+
+
+def mkdir(path: str):
+    os.mkdir(path)
 
 
 def to_path(*args: str) -> str:
@@ -21,7 +25,7 @@ def write(path: str, data: Iterable[str]):
         fout.writelines(data)
 
 
-def write_binary(path: str, data):
+def write_binary(path: str, data: bytes):
     with open(path, 'wb') as fout:
         fout.write(data)
 

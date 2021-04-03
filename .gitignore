@@ -131,3 +131,6 @@ dmypy.json
 # Custom
 !/eggs/
 /.vscode/settings.json
+/eggs
+/cache
+/eggs.txt

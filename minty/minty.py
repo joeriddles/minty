@@ -3,6 +3,7 @@ import asyncio
 
 import aiohttp
 import bs4
+import more_itertools
 
 from . import cache, files
 from .links import Link
@@ -30,12 +31,13 @@ class Minty():
             tasks.append(task)
 
         urls = []
-        for content in await asyncio.gather(*tasks, return_exceptions=True):
-            soup = bs4.BeautifulSoup(content, 'lxml')
-            for loc in soup.find_all('loc'):
-                contents = loc.contents
-                url = contents[0]
-                urls.append(url)
+        for task_chunk in more_itertools.chunked(tasks, 10):
+            for content in await asyncio.gather(*task_chunk, return_exceptions=True):
+                soup = bs4.BeautifulSoup(content, 'lxml')
+                for loc in soup.find_all('loc'):
+                    contents = loc.contents
+                    url = contents[0]
+                    urls.append(url)
         return urls
 
     async def find_eggs(self, urls: list[str]) -> list[str]:
@@ -62,15 +64,19 @@ class Minty():
                 task = get_for_link(link)
                 tasks.append(task)
 
-            for link, content in await asyncio.gather(*tasks, return_exceptions=True):
-                soup = bs4.BeautifulSoup(content, features="html.parser")
-                link.eggs = list(self._parse_eggs(soup))
-                urls_for_link = self._parse_hrefs(soup)
-                for url in urls_for_link:
-                    if url not in links_by_url:
-                        sub_link = Link(url)
-                        links_by_url[url] = sub_link
-                link.visited = True
+            for task_chunk in more_itertools.chunked(tasks, 10):
+                for result in await asyncio.gather(*task_chunk, return_exceptions=True):
+                    if isinstance(result, Exception):
+                        raise result
+                    link, content = result
+                    soup = bs4.BeautifulSoup(content, features="html.parser")
+                    link.eggs = list(self._parse_eggs(soup))
+                    urls_for_link = self._parse_hrefs(soup)
+                    for url in urls_for_link:
+                        if url not in links_by_url:
+                            sub_link = Link(url)
+                            links_by_url[url] = sub_link
+                    link.visited = True
 
             not_visited = [
                 link for
@@ -86,6 +92,7 @@ class Minty():
         return eggs
 
     async def download_eggs(self, eggs: list[str]):
+        breakpoint()
         for egg in eggs:
             name_parts = egg.split('/')
             egg_name = name_parts[len(name_parts) - 1]
@@ -107,6 +114,8 @@ class Minty():
         async def get():
             async with self.session.get(url) as response:
                 content = await response.read()
+                if not response.ok:
+                    raise Exception(response.ok, content)
             return content
         return get
 

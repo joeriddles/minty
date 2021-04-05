@@ -13,7 +13,7 @@ This project was created for fun and profit (just kidding - only fun). The goal 
 - Sit back and enjoy.☕
 
 ## 📂 /cache
-Cached HTML content responses.
+Cached HTML content responses. Generated after running the module. 
 
-## 🥚 /eggs
-Cached downloaded egg images.
+## 🥚 /cache/eggs
+Cached downloaded egg images. Generated after running the module. 
